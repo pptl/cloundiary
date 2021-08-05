@@ -1,21 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+//import Store from './store';//不知道為什麼store不可以從別的project塞入
+import HomeScreen from './module/homeScreen';
+import { configureStore } from "@reduxjs/toolkit";
+
+import mainReducer from './module/mainModule/slice';
+
+const Store = configureStore({
+    reducer:{
+        mainReducer,
+    }
+})
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={ Store }>
+      <HomeScreen></HomeScreen>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
