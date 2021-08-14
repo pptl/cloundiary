@@ -9,7 +9,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 const PageContent = () => {
   return (
     <View style={{flexGrow:1}}>
-      <Text>wawawawaw</Text>
     </View>
   )
 }

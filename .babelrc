@@ -7,7 +7,7 @@
         "alias": {
           "Components": "./components",
           "Module": "./module",
-          "Images": "./static/assets/images"
+          "Images": "./assets"
         }
       }
     ]
