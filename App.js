@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 //import Store from './store';//不知道為什麼store不可以從別的project塞入
-import HomeScreen from './module/homeScreen';
 import { configureStore } from "@reduxjs/toolkit";
-
-import mainReducer from './module/mainModule/slice';
+import mainReducer from 'Module/mainModule/slice';
+import MainScreen from 'Module/mainModule/mainScreen';
+/* import { SafeAreaProvider } from 'react-native-safe-area-context'; */
 
 const Store = configureStore({
     reducer:{
@@ -15,7 +15,7 @@ const Store = configureStore({
 export default function App() {
   return (
     <Provider store={ Store }>
-      <HomeScreen></HomeScreen>
+        <MainScreen/>
     </Provider>
   );
 }

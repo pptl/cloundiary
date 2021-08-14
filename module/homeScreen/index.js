@@ -1,11 +1,13 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-//import Text from 'Components/text';
+import Text from 'Components/Text';
+import StyleSheet from 'Components/StyleSheet';
+import View from 'Components/View';
+import tw from 'tailwind-react-native-classnames';
 
 const HomeScreen = () => {
     return (
         <View style={styles.container}>
-            <Text>homeScreen</Text>
+            <Text style={tw`text-red-500`}>homeScreensddqq</Text>
         </View>
     )
 }

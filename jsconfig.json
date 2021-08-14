@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
-    "checkJs": false,
+    "jsx": "react",
+    "checkJs": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "target": "es2020",
     "module": "es2015",
-    "baseUrl": "src"
+    "baseUrl": ".",
+    "paths": {
+      "Components/*": ["./components/*"],
+      "Module/*": ["./module/*"],
+      "Images/*": ["./static/assets/images/*"]
+    }
   },
   "exclude": [
     "dist",
@@ -18,11 +24,6 @@
   ],
   "typeAcquisition": {
     "enable": true,
-    "include": [
-      "react",
-      "react-dom",
-      "jest",
-      "testing-library__jest-dom"
-    ]
+    "include": ["react", "react-dom", "jest", "testing-library__jest-dom"]
   }
 }
