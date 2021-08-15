@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
+import { useDispatch } from 'react-redux';
 //import tw from 'tailwind-react-native-classnames';
 
 // @ts-ignore
@@ -13,34 +14,17 @@ const homeIcon = require('Images/icon_home.png'),
     // @ts-ignore
     settingIcon = require('Images/icon_setting.png');
     
+import {
+  setPage,
+} from 'Module/mainModule/slice';
 
-const NavButton = (props) => {
-    const {
-        text,
-        img,
-    } = props;
-
-    return(
-        <TouchableOpacity onPress={()=>console.log(text)} style={{alignItems:'center', justifyContent:'center', minWidth:32}}>
-            <Image source={img} style={styles.icon}/>
-            <Text style={{fontSize:10}}>{text}</Text>
-        </TouchableOpacity>
-    )
-}
-
-const NavBar = () => {
-    return (
-        <View style={styles.container}>
-            <View style={{ height:'100%', justifyContent:'space-around', flexDirection:'row'}}>
-                <NavButton text={'行事曆'} img={calendarIcon}/>
-                <NavButton text={'便條紙'} img={noteIcon}/>
-                <NavButton text={'首頁'} img={homeIcon}/>
-                <NavButton text={'群組'} img={groupIcon}/>
-                <NavButton text={'設定'} img={settingIcon}/>
-            </View>
-        </View>
-    )
-}
+import {
+    CALENDAR,
+    NOTE,
+    HOME,
+    GROUP,
+    SETTING,
+} from 'Module/mainModule/consts';
 
 const styles = StyleSheet.create({
     container: {
@@ -63,5 +47,36 @@ const styles = StyleSheet.create({
         width: 31,
     }
 })
+
+const NavButton = (props) => {
+    const {
+        text,
+        img,
+        pageName,
+    } = props;
+
+    const dispatch = useDispatch();
+
+    return(
+        <TouchableOpacity onPress={()=>dispatch(setPage(pageName))} style={{alignItems:'center', justifyContent:'center', minWidth:32}}>
+            <Image source={img} style={styles.icon}/>
+            <Text style={{fontSize:10}}>{text}</Text>
+        </TouchableOpacity>
+    )
+}
+
+const NavBar = () => {
+    return (
+        <View style={styles.container}>
+            <View style={{ height:'100%', justifyContent:'space-around', flexDirection:'row'}}>
+                <NavButton text={'行事曆'} img={calendarIcon} pageName={CALENDAR}/>
+                <NavButton text={'便條紙'} img={noteIcon} pageName={NOTE}/>
+                <NavButton text={'首頁'} img={homeIcon} pageName={HOME}/>
+                <NavButton text={'群組'} img={groupIcon} pageName={GROUP}/>
+                <NavButton text={'設定'} img={settingIcon} pageName={SETTING}/>
+            </View>
+        </View>
+    )
+}
 
 export default NavBar;
