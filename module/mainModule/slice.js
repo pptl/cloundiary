@@ -26,4 +26,14 @@ export const{
     setPage,
 } = actions;
 
+/* 
+export const getSome = () => asnyc(dispatch)=>{
+    try{
+
+    }catch(error){
+
+    }
+}
+*/
+
 export default reducer;

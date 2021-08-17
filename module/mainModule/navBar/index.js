@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 //import tw from 'tailwind-react-native-classnames';
 
 // @ts-ignore
@@ -12,7 +13,17 @@ const homeIcon = require('Images/icon_home.png'),
     // @ts-ignore
     noteIcon = require('Images/icon_note.png'),
     // @ts-ignore
-    settingIcon = require('Images/icon_setting.png');
+    settingIcon = require('Images/icon_setting.png'),
+    // @ts-ignore
+    homeIconFocused = require('Images/icon_home_focused.png'),
+    // @ts-ignore
+    calendarIconFocused = require('Images/icon_calendar_focused.png'),
+    // @ts-ignore
+    groupIconFocused = require('Images/icon_group_focused.png'),
+    // @ts-ignore
+    noteIconFocused = require('Images/icon_note_focused.png'),
+    // @ts-ignore
+    settingIconFocused = require('Images/icon_setting_focused.png');
     
 import {
   setPage,
@@ -66,14 +77,19 @@ const NavButton = (props) => {
 }
 
 const NavBar = () => {
+
+    // @ts-ignore
+    const currentPage = useSelector(state => state.mainReducer.page);
+
+    
     return (
         <View style={styles.container}>
             <View style={{ height:'100%', justifyContent:'space-around', flexDirection:'row'}}>
-                <NavButton text={'行事曆'} img={calendarIcon} pageName={CALENDAR}/>
-                <NavButton text={'便條紙'} img={noteIcon} pageName={NOTE}/>
-                <NavButton text={'首頁'} img={homeIcon} pageName={HOME}/>
-                <NavButton text={'群組'} img={groupIcon} pageName={GROUP}/>
-                <NavButton text={'設定'} img={settingIcon} pageName={SETTING}/>
+                <NavButton text={'行事曆'} img={(currentPage === CALENDAR) ? calendarIconFocused : calendarIcon} pageName={CALENDAR}/>
+                <NavButton text={'便條紙'} img={(currentPage === NOTE) ? noteIconFocused : noteIcon} pageName={NOTE}/>
+                <NavButton text={'首頁'} img={(currentPage === HOME) ? homeIconFocused : homeIcon} pageName={HOME}/>
+                <NavButton text={'群組'} img={(currentPage === GROUP) ? groupIconFocused : groupIcon} pageName={GROUP}/>
+                <NavButton text={'設定'} img={(currentPage === SETTING) ? settingIconFocused : settingIcon} pageName={SETTING}/>
             </View>
         </View>
     )

@@ -3,6 +3,8 @@ import Text from 'Components/Text';
 import StyleSheet from 'Components/StyleSheet';
 import View from 'Components/View';
 import tw from 'tailwind-react-native-classnames';
+import Icon from 'Components/SVGIcon/base64SvgIcon';
+
 
 const styles = StyleSheet.create({
     container: {

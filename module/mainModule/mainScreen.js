@@ -66,6 +66,7 @@ const MainScreen = () => {
         <SafeAreaView style={styles.container}>
           <LinearGradient colors={['#BCE2F8', 'transparent']} style={{flex:1}}>
             <View style={{marginTop: StatusBar.currentHeight}}></View>
+            <View style={{marginTop: 48}}></View>
             <PageContent/>
             <NavBar/>
           </LinearGradient>
