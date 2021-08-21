@@ -1,4 +1,4 @@
-import { iconSources } from "Images/svgIconSource";
+import { iconSources } from "Images/svgIconBase64Source";
 import React from "react";
 import { Image } from "react-native";
 import PropTypes from 'prop-types';

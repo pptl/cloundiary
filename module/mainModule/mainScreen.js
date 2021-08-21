@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, StyleSheet, View, SafeAreaView, StatusBar,  } from 'react-native'
+import { StyleSheet, View, SafeAreaView, StatusBar, Dimensions  } from 'react-native'
 import NavBar from 'Module/mainModule/navBar';
 //import tw from 'tailwind-react-native-classnames';
 //import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,6 +23,7 @@ import {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    //maxWidth: Dimensions.get('window').width
     //marginTop: StatusBar.currentHeight,
   },
 });
@@ -62,11 +63,12 @@ const PageContent = () => {
 }
 
 const MainScreen = () => {
+
     return (
         <SafeAreaView style={styles.container}>
           <LinearGradient colors={['#BCE2F8', 'transparent']} style={{flex:1}}>
             <View style={{marginTop: StatusBar.currentHeight}}></View>
-            <View style={{marginTop: 48}}></View>
+            <View style={{height: 48, backgroundColor: '#000', opacity: 0.1, marginBottom:10}}></View>
             <PageContent/>
             <NavBar/>
           </LinearGradient>
