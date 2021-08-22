@@ -10,28 +10,60 @@ const mockData = [
     {
         start: { month: 8, day: 2 },
         end: { month: 8, day: 2 },
-        text: '吃飯時間',
+        text: '吃飯',
         tagColor: '#ABD4E8',
+        priority: 0,
+        isImportant: false,
+    },
+    {
+        start: { month: 8, day: 2 },
+        end: { month: 8, day: 3 },
+        text: '哈咯',
+        tagColor: '#BFDCA7',
+        priority: 1,
+        isImportant: false,
     },
     {
         start: { month: 8, day: 7 },
         end: { month: 8, day: 7 },
-        text: '睡覺時間',
+        text: '睡覺',
         tagColor: '#E8ABAB',
+        priority: 0,
+        isImportant: false,
     },
     {
-        start: { month: 8, day: 14 },
+        start: { month: 8, day: 13 },
         end: { month: 8, day: 16 },
         text: '考試',
         tagColor: '#EDD9A8',
+        priority: 3,
+        isImportant: false,
     },
     {
-        start: { month: 8, day: 16 },
+        start: { month: 8, day: 14 },
         end: { month: 8, day: 20 },
         text: '約會',
         tagColor: '#FF8C69',
+        priority: 6,
+        isImportant: false,
+    },
+    {
+        start: { month: 8, day: 18 },
+        end: { month: 8, day: 18 },
+        text: '打電動',
+        tagColor: '#E8ABAB',
+        priority: 0,
+        isImportant: false,
+    },
+    {
+        start: { month: 8, day: 18 },
+        end: { month: 8, day: 20 },
+        text: '吃飯',
+        tagColor: '#E8ABAB',
+        priority: 2,
+        isImportant: false,
     }
-];
+]; 
 
 const styles = StyleSheet.create({})
 
@@ -86,32 +118,39 @@ for(let i = 0; i < eventArr.length; i++){
     }
 }
 
-
-
 const Cell = (props)=>{
     const{
         children,
-        tagData = [],
+        tagData = {},
     } = props;
 
-    let actived = tagData.length > 0;
-    console.log(tagData)
+    const {
+        firstTag = null,
+        secondTag = null,
+    } = tagData;
 
     return(
         <View>
             <View>
-                <Text style={{color:'#5D6065', textAlign: 'center'}}>{children}</Text>
+                {
+                    (typeof children === 'number') ? <Text style={{color:'#5D6065', textAlign: 'center'}}>{children}</Text> : children
+                }
+                
             </View>
             <View>
-                <View style={actived ? {height:16, marginBottom:4, width:`${(tagData[0].end.day - tagData[0].start.day + 1) * 100}%`, borderRadius:4, backgroundColor:tagData[0].tagColor} : {height:16, marginBottom:4}}>
-                    {
-                        actived && <Text style={{textAlign:'center', color: '#fff', fontSize:12}}>{tagData[0].text}</Text>
-                    }
+                <View style={(firstTag !== null) ? {height:16, paddingLeft:3, paddingRight:3, marginBottom:4, width:`${(firstTag?.end.day - firstTag?.start.day + 1) * 100}%` } : {height:16, marginBottom:4}}>
+                    <View style={(firstTag !== null) ? {backgroundColor: firstTag?.tagColor,borderRadius:4} : {}}>
+                        {
+                            (firstTag !== null) && <Text style={{textAlign:'center', color: '#fff', fontSize:12}}>{firstTag?.text}</Text>
+                        }
+                    </View>
                 </View>
-                <View style={(actived && tagData.length > 1 ) ? {height:16,width:`${(tagData[1].end.day - tagData[1].start.day + 1) * 100}%`, borderRadius:4, backgroundColor:tagData[1].tagColor} : {height:16, marginBottom:4}}>
-                    {
-                        (actived && tagData.length > 1 )&& <Text style={{textAlign:'center', color:'#fff', fontSize:12}}>{tagData[1].text}</Text>
-                    }
+                <View style={(secondTag !== null) ? {height:16, paddingLeft:3, paddingRight:3, width:`${(secondTag?.end.day - secondTag?.start.day + 1) * 100}%`} : {height:16, marginBottom:4}}>
+                    <View style={(secondTag !== null) ? {backgroundColor: secondTag?.tagColor, borderRadius:4} : {}}>
+                        {
+                            (secondTag !== null) && <Text style={{textAlign:'center', color:'#fff', fontSize:12}}>{secondTag?.text}</Text>
+                        }
+                    </View>
                 </View> 
             </View>
         </View>
@@ -124,21 +163,65 @@ const Calendar = () => {
     const rowData = [];
     let tempArr = [];
     let tempDays = currMonthDays;
+    //記錄上一個照成{firstTag:null, secondTag:{}}的event的end
+    //為了判斷tag在以上情況下到底要放在first或是second
+    let tagPlaceTemp = 0;
 
     for(let i = 0 ; i < 6 ; i++){
         //第一個星期
         if(i === 0){
             //上個月日期
             for(let k = (preMonthDays - w + 1); k <= preMonthDays ; k++){
-                tempArr.push(<Text style={{color:'#5D6065', textAlign: 'center'}}>{k}</Text>);
+                tempArr.push(<Cell><Text style={{color:'#5D6065', textAlign: 'center'}}>{k}</Text></Cell>);
             }
             //本月日期
             for(let z = 0; z < 7 - w; z++){
+                const today = z + 1;
 
                 let tagData = splitedEventArr.filter((e)=>{
-                    if(e.start.day === (z + 1))return true;
+                    if(e.start.day === today)return true;
                 })
-                tempArr.push(<Cell tagData={tagData}>{z + 1}</Cell>);
+
+                let todayTags = tagData.filter((e)=>{
+                    if(e.start.day === today)return true;
+                })
+            
+                let temp = {};
+                //sort todayTags
+                for(let i = 0;i < todayTags.length; i++){
+                    for(let j = 0; j < i; j++){
+                        if(todayTags[i].priority > todayTags[j].priority){
+                            temp = todayTags[i];
+                            todayTags[i] = todayTags[j];
+                            todayTags[j] = temp;
+                        }
+                    }
+                }
+                let firstTag = null,
+                    secondTag = null;
+
+                if(todayTags.length > 0){
+                    switch(tagData.length - todayTags.length){
+                        case 0:
+                                if(todayTags.length === 1){
+                                    firstTag = todayTags[0];
+                                }else{
+                                    firstTag = todayTags[0];
+                                    secondTag = todayTags[1];
+                                }
+                            break;
+                        case 1:
+                                if(tagPlaceTemp < today){
+                                    secondTag = todayTags[0];
+                                    tagPlaceTemp = todayTags[0].end.day;
+                                }else{
+                                    firstTag = todayTags[0];
+                                }
+                            break;
+                    }
+                }
+
+                tempArr.push(<Cell tagData={{firstTag, secondTag}}>{today}</Cell>);
                 tempDays--;
             }
             rowData.push(tempArr);
@@ -148,15 +231,58 @@ const Calendar = () => {
             for(let j = 0; j < 7; j++){
                 //本月日期
                 if(tempDays > 0){
+                    const today = currMonthDays - tempDays + 1;
+
                     let tagData = splitedEventArr.filter((e)=>{
-                        if(e.start.day === (currMonthDays - tempDays + 1))return true;
+                        if((e.start.day <= today) && (e.end.day >= today))return true;
                     })
-                    tempArr.push(<Cell tagData={tagData}>{currMonthDays - tempDays + 1}</Cell>);
+                    let todayTags = tagData.filter((e)=>{
+                        if(e.start.day === today)return true;
+                    })
+                
+                    let temp = {};
+                    //sort todayTags
+                    for(let i = 0;i < todayTags.length; i++){
+                        for(let j = 0; j < i; j++){
+                            if(todayTags[i].priority > todayTags[j].priority){
+                                temp = todayTags[i];
+                                todayTags[i] = todayTags[j];
+                                todayTags[j] = temp;
+                            }
+                        }
+                    }
+                    let firstTag = null,
+                        secondTag = null;
+                    
+                    
+                    if(todayTags.length > 0){
+                        switch(tagData.length - todayTags.length){
+                            case 0:
+                                    if(todayTags.length === 1){
+                                        firstTag = todayTags[0];
+                                    }else{
+                                        firstTag = todayTags[0];
+                                        secondTag = todayTags[1];
+                                    }
+                                break;
+                            case 1:
+                                    if(tagPlaceTemp < today){
+                                        secondTag = todayTags[0];
+                                        tagPlaceTemp = todayTags[0].end.day;
+                                    }else{
+                                        firstTag = todayTags[0];
+                                    }
+                                break;
+                        }
+
+                    }
+
+                    tempArr.push(<Cell tagData={{firstTag, secondTag}}>{today}</Cell>);
                     tempDays--;
                 }else{
                     let tempNum = 1;
                     while(tempArr.length < 7){
-                        tempArr.push(<Text style={{color:'#5D6065', textAlign: 'center'}}>{tempNum}</Text>);
+                        tempArr.push(<Cell><Text style={{color:'#5D6065', textAlign: 'center'}}>{tempNum}</Text></Cell>);
                         tempNum++;
                     }
                     tempNum = 1;
